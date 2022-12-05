@@ -184,7 +184,7 @@ app.post('/admin/SavePatient', (req, res) => {
 
 
 // -------------Doctor--------------------------------------
-app.get('/admin/GetDoctor', (req, res) => {
+app.get('/admin/GetDoctors', (req, res) => {
     client.query('Select * from doctor', (err, result) => {
         if (!err)
         {
@@ -279,5 +279,59 @@ app.post('/admin/SaveDoctor', (req, res) => {
             }
         })
     }
+    client.end;
+});
+
+app.get('/admin/GetServices', (req, res) => {
+    client.query('Select * from services', (err, result) => {
+        if (!err)
+        {
+            res.json( {Code: "SUCCESS", data: result.rows, Message: "Services successfully retrieved!"});
+        }
+        else {
+            res.json({ Code: "ERROR", Message: err.message });
+        }
+    })
+});
+
+app.post('/admin/SaveAppointment', (req, res) => {
+    
+    var appointment = {
+        AppointmentId: 0,
+        PatientId: 0,
+        DoctorId: 0, 
+        ServiceId: 0,
+        Date: Date.now,
+        Status: ""
+    }
+    appointment = req.body;
+
+    let addQuery = `insert into appointment 
+                    (
+                        datetime, 
+                        status, 
+                        meeting_link, 
+                        patient_id, 
+                        doctor_id, 
+                        service_id
+                    ) 
+                    values
+                    (
+                        '${appointment.Date}',
+                        '${appointment.Status}',
+                        'https://telemed.domain/link',
+                        '${appointment.PatientId}',
+                        '${appointment.DoctorId}',
+                        '${appointment.ServiceId}'
+                    );`;
+                    
+    client.query(addQuery, (err, result) => {
+        if (!err) {
+            res.json({ Code: "SUCCESS", Message: "Appointment was created successfully!" });
+        }
+        else {
+            res.json({ Code: "ERROR", Message: err.message });
+        }
+    });
     client.end;
 });
