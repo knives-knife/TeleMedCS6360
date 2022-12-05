@@ -181,3 +181,103 @@ app.post('/admin/SavePatient', (req, res) => {
     }
     client.end;
 });
+
+
+// -------------Doctor--------------------------------------
+app.get('/admin/GetDoctor', (req, res) => {
+    client.query('Select * from doctor', (err, result) => {
+        if (!err)
+        {
+            res.json( {Code: "SUCCESS", data: result.rows, Message: "Doctor successfully retrieved!"});
+        }
+        else {
+            res.json({ Code: "ERROR", Message: err.message });
+        }
+    })
+});
+
+app.post('/admin/GetDoctorById', (req, res) => {
+    client.query(`Select * from doctor where doctor_id = '${req.body.doctor_id}' limit 1`, (err, result) => {
+        if (!err)
+        {
+            res.json( {Code: "SUCCESS", data:result.rows[0], Message: "doctor successfully retrieved"})
+        }
+        else
+        {
+            res.json({ Code: "ERROR", Message: err.message });
+        }
+    })
+});
+
+app.post('/admin/SaveDoctor', (req, res) => {
+    var doctor = {
+        doctorId: 0,
+        FName: "",
+        MName: "",
+        LName: "",
+        DateOfBirth: Date.now,
+        PhoneNumber: "",
+        Address: "",
+        Username: "",
+        Password: "",
+    }
+    doctor = req.body;
+
+    // Add doctor
+    if (doctor.doctorId <= 0) {
+        let addQuery = `insert into doctor 
+                        (
+                            first_name, 
+                            middle_name, 
+                            last_name,  
+                            date_of_birth, 
+                            phone_number, 
+                            address, 
+                            username, 
+                            pass
+                        ) 
+                        values
+                        (
+                            '${doctor.FName}',
+                            '${doctor.MName}',
+                            '${doctor.LName}',
+                            '${doctor.DateOfBirth}',
+                            '${doctor.PhoneNumber}',
+                            '${doctor.Address}',
+                            '${doctor.Username}',
+                            '${doctor.Password}'
+                        );`;
+                        
+        client.query(addQuery, (err, result) => {
+            if (!err) {
+                res.json({ Code: "SUCCESS", Message: "doctor was created successfully!" });
+            }
+            else {
+                res.json({ Code: "ERROR", Message: err.message });
+            }
+        });
+    }
+    // Save doctor
+    else {
+        let updateQuery = `update doctor 
+                            set 
+                                first_name = '${doctor.FName}',
+                                middle_name = '${doctor.MName}',
+                                last_name = '${doctor.LName}',
+                                date_of_birth = '${doctor.DateOfBirth}',
+                                phone_number = '${doctor.PhoneNumber}',
+                                address = '${doctor.Address}',
+                                username = '${doctor.Username}',
+                                pass = '${doctor.Password}'
+                            where doctor_id = '${doctor.doctorId}'`;
+        client.query(updateQuery, (err, result) => {
+            if (!err) {
+                res.json({ Code: "SUCCESS", Message: "doctor successfully updated!" });
+            }
+            else {
+                res.json({ Code: "ERROR", Message: err.message });
+            }
+        })
+    }
+    client.end;
+});
