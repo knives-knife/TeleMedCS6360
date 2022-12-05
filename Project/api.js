@@ -6,7 +6,9 @@ const app = express();
 
 app.use(cors());
 app.listen(3300, () => {
-    console.log('Server is listening at port 3300')
+    console.log("API Output");
+    console.log('Server is listening at port 3300\n');
+    console.log("Keep this open as long as the front end is being used\n\n")
 })
 client.connect();
 app.use(bodyParser.json());
