@@ -101,11 +101,81 @@ async function savePatient(e) {
 
 }
 
+async function getServices() {
+    let options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    let resp = await fetch('http://localhost:3300/admin/GetServices', options);
+    resp = await resp.json();
+    return resp;
+}
+
+
+async function saveAppointment(e) {
+    let resp = undefined;
+
+    e.preventDefault();
+
+    let id = "0";
+    if (parent.document.URL.indexOf('=') > -1) {
+        id = parent.document.URL.substring(parent.document.URL.indexOf('=') + 1, parent.document.URL.length);
+    }
+
+    var appointment = {
+        AppointmentId: 0,
+        PatientId: 0,
+        DoctorId: 0, 
+        ServiceId: 0,
+        Date: Date.now,
+        Status: ""
+    }
+
+    let vals = [...e.target.elements];
+    vals.forEach(x => {
+        if (x.localName !== "button" && (x.value == "" || x.value === undefined || x.value == null)) {
+            resp = { Code: "INVALID", Message: x.name + " is invalid" };
+        }
+        if (appointment[x.name] !== undefined || appointment[x.name] != null) {
+            appointment[x.name] = x.value;
+        }
+    });
+
+
+    let basePath = getBasePath(window.location.pathname, 2);
+    if (resp === undefined) {
+
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(appointment)
+        }
+        resp = await fetch('http://localhost:3300/admin/SaveAppointment', options)
+        resp = await resp.json();
+
+    }
+    // Query ran successfully
+    if (resp.Code === "SUCCESS") {
+        alert(resp.Message);
+        window.location.href = basePath + 'admin/index.html'
+    }
+    // Invalid Input
+    else if (resp.Code == "INVALID") {
+        alert(resp.Message);
+    }
+    // Error
+    else {
+        alert("ERROR: " + resp.Message);
+    }
+
+}
 
 
 //-------------------DOctor-------------------------
-const { json } = require("body-parser");
-const { resolvePtr } = require("dns");
 
 function getBasePath(path, depth) {
     let base = path;
@@ -115,14 +185,14 @@ function getBasePath(path, depth) {
     return base + "/";
 }
 
-async function getDoctor() {
+async function getDoctors() {
     let options = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     }
-    let resp = await fetch('http://localhost:3300/admin/GetDoctor', options);
+    let resp = await fetch('http://localhost:3300/admin/GetDoctors', options);
     resp = await resp.json();
     return resp;
 }
@@ -205,3 +275,5 @@ async function saveDoctor(e) {
     }
 
 }
+
+asyn
