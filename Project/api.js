@@ -78,7 +78,32 @@ app.post('/admins', (req, res) => {
 
     // res.json({mesage: 'authenticated', data: {}})
     client.end;
-})
+});
+
+app.get('/admin/GetPatients', (req, res) => {
+    client.query('Select * from Patient', (err, result) => {
+        if (!err)
+        {
+            res.json( {Code: "SUCCESS", data: result.rows, Message: "Patients successfully retrieved!"});
+        }
+        else {
+            res.json({ Code: "ERROR", Message: err.message });
+        }
+    })
+});
+
+app.post('/admin/GetPatientById', (req, res) => {
+    client.query(`Select * from Patient where patient_id = '${req.body.patient_id}' limit 1`, (err, result) => {
+        if (!err)
+        {
+            res.json( {Code: "SUCCESS", data:result.rows[0], Message: "Patient successfully retrieved"})
+        }
+        else
+        {
+            res.json({ Code: "ERROR", Message: err.message });
+        }
+    })
+});
 
 app.post('/admin/SavePatient', (req, res) => {
     var patient = {
@@ -121,8 +146,7 @@ app.post('/admin/SavePatient', (req, res) => {
                             '${patient.Username}',
                             '${patient.Password}'
                         );`;
-        console.log(patient);
-        console.log(addQuery);
+                        
         client.query(addQuery, (err, result) => {
             if (!err) {
                 res.json({ Code: "SUCCESS", Message: "Patient was created successfully!" });
@@ -137,7 +161,7 @@ app.post('/admin/SavePatient', (req, res) => {
         let updateQuery = `update Patient 
                             set 
                                 first_name = '${patient.FName}',
-                                middle_name = '${patient.MName}'}',
+                                middle_name = '${patient.MName}',
                                 last_name = '${patient.LName}',
                                 gender = '${patient.Gender}',
                                 date_of_birth = '${patient.DateOfBirth}',
@@ -156,4 +180,4 @@ app.post('/admin/SavePatient', (req, res) => {
         })
     }
     client.end;
-})
+});
