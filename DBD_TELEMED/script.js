@@ -12,7 +12,6 @@ async function getFormData(e){
     let pass = document.getElementById('password_ip').value;
 
     let basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')+1);
-    console.log(basePath);
 
     let options = {
         method: 'POST',
@@ -26,9 +25,6 @@ async function getFormData(e){
     }
     let resp = await fetch('http://localhost:3300/admins', options)
     resp = await resp.json();
-
-    console.log(resp);
-    console.log(resp.data);
 
     // Authenticated
     if (resp.data.admin_id > 0)
@@ -45,9 +41,4 @@ async function getFormData(e){
     {
         alert("ERROR")
     }
-
-    // alert('Message is :' + resp);
-    //window.location.href = 'C:/Users/sudob/Desktop/DBD_TELEMED/register.html'
 }
-
-getDataById(2);

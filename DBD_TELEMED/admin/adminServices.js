@@ -1,12 +1,15 @@
+function getBasePath(path, depth) {
+    let base = path;
+    for (let i = 0; i < depth; i++)
+    {
+        base = base.substring(0, base.lastIndexOf("/"));
+    }
+    return base + "/";
+}
+
 
 async function addPatient(e) {
     e.preventDefault();
-    console.log(e);
-    // console.log(document);
-    // let form = document.getElementById('quickForm');
-    // console.log(form);
-    // const fullName = document.getElementById('lname');
-    // console.log(fullName);
 
     var patient = {
         PatientId: 0,
@@ -21,8 +24,6 @@ async function addPatient(e) {
         Password: "",
     }
 
-    console.log(patient);
-
     let vals = [...e.target.elements];
     vals.forEach(x => {
         console.log(x);
@@ -33,7 +34,7 @@ async function addPatient(e) {
 
     patient.Gender = patient.Gender.substring(0, 1);
 
-    console.log(patient);
+    let basePath = getBasePath(window.location.pathname, 2);
 
     let options = {
         method: 'POST',
@@ -42,23 +43,16 @@ async function addPatient(e) {
         },
         body: JSON.stringify(patient)
     }
-    console.log(options);
     let resp = await fetch('http://localhost:3300/admin/SavePatient', options)
     resp = await resp.json();
-
-    console.log(resp);
-    console.log(resp.data);
 
     // Authenticated
     if (resp.Code === "SUCCESS") {
         alert(resp.Message);
-        // window.location.href = 'C:/Users/joahp/Desktop/DBD_TELEMED/admin/index.html'
+        window.location.href = basePath + '/admin/index.html'
     }
     // Error
     else {
         alert("ERROR: " + resp.Message);
     }
-
-    // alert('Message is :' + resp);
-    //window.location.href = 'C:/Users/sudob/Desktop/DBD_TELEMED/register.html'
 }
