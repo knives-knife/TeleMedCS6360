@@ -153,7 +153,7 @@
               <!-- jquery validation -->
               <div class="card card-success">
                 <!-- form start -->
-                <form role="form" id="quickForm" onsubmit="addPatient(event)">
+                <form role="form" id="quickForm" onsubmit="savePatient(event)">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-md-12">
@@ -205,8 +205,8 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>Address</label>
-                          <textarea class="form-control" name="Address"
-                            placeholder="ex. 42 Wallaby Way, Sydney, Australia"></textarea>
+                          <input type="text" class="form-control" name="Address"
+                            placeholder="ex. 42 Wallaby Way, Sydney, Australia">
                         </div>
                       </div>
                       <div class="col-md-12">
