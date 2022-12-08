@@ -16,7 +16,7 @@ async function getDoctor() {
             'Content-Type': 'application/json'
         }
     }
-    let resp = await fetch('http://localhost:3300/admin/GetDoctor', options);
+    let resp = await fetch('http://localhost:3300/admin/GetDoctors', options);
     resp = await resp.json();
     return resp;
 }
