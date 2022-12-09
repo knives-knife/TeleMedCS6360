@@ -13,8 +13,8 @@ There are two main parts to this system: the database and the interface.
 - Create a new database called 'TeleMed' using default everything by going Object>Create>Database
 - Right click the 'TeleMed' database on the left panel and select 'Query Tool' near the bottom
 - In the top left of the query tool, select the folder icon to open scripts
-- Open and run the `Create_Tables.sql` script
-- Open and run the `Populate_Tables.sql` script
+- Open and run the `CreateTables.sql` script
+- Open and run the `DataPopulation.sql` script
 - The database is now set up!
 
 ## Setting Up the Interface
